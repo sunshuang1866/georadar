@@ -31,6 +31,43 @@ fetch(https://www.mindspore.cn/) → 返回 Nuxt.js JavaScript 包代码
 
 **影响**：AI 训练爬虫和 RAG 实时检索**均无法从官网获取任何信息**。这意味着 AI 对 MindSpore 的认知完全依赖 GitHub、第三方博客等间接来源，官方定义无法被 AI 直接采用。
 
+##### 优秀实现案例（参考）
+
+**案例1：PyTorch (https://pytorch.org)**
+- 首页直接返回完整的静态 HTML，包含项目定义、功能列表、特性描述
+- 无需 JavaScript 渲染即可获取所有核心信息
+- AI 友好度：⭐⭐⭐⭐⭐
+
+**案例2：TensorFlow (https://tensorflow.org)**
+- 静态 HTML + Schema.org 结构化数据
+- 首页包含明确的"One sentence description"
+- 有 `<script type="application/ld+json">` 标注软件信息
+- AI 友好度：⭐⭐⭐⭐⭐
+
+**案例3：LangChain (https://langchain.com)**
+- 首页静态描述清晰，包含用例、特性、定位
+- 即使是 SPA 框架，也为首页提供完整的静态 HTML 版本
+
+**案例4：Vue.js (https://vuejs.org)**
+- 使用 VitePress 静态生成文档
+- 首页有完整的项目介绍文字块
+
+##### 解决方案建议
+
+| 方案 | 实现方式 | 工作量 |
+|------|----------|--------|
+| **方案A：SSR 模式** | 启用 Nuxt 的 server-side rendering | 中等 |
+| **方案B：静态页面** | 为首页创建 `/about` 或 `/intro` 静态入口 | 小 |
+| **方案C：meta 标签补充** | 在 Nuxt 配置中添加 `<meta name="description">` 和 `og:description` | 最小 |
+
+**最低成本快速方案**：添加一个静态的 `/about` 页面，包含：
+- 一句话项目定义
+- 3-5 个核心特性关键词（LLM训练、昇腾NPU优化等）
+- 适用场景描述
+- 链接到 GitHub、文档
+
+这样 AI 即使无法抓取 JS 渲染的首页，也能从 `/about` 页面获取权威信息。
+
 ---
 
 #### 问题2：GitHub 主仓库活跃度信号严重弱化
